@@ -2,9 +2,9 @@
 
 ## 1. Datainhämtning 
 
-Med Sverige som exempel så finns det flera privata och offentliga aktörer som för statistik kring huspriser. Den Statistiska Centralbyrån [1] delar öppet data om prisindex i olika format (ascii/CSV, spreadsheet och i diagram). Svensk mäklarstatisik [2] får in data från majoriteten av svenska mäklare och även Hemnet [3] samlar in försäljningsstatistik. Bäst är att kontakta dem direkt beträffande vilka data de kan dela med sig av.
+Med Sverige som exempel så finns det flera privata och offentliga aktörer som för statistik kring huspriser. Den Statistiska Centralbyrån [1] delar öppet data om prisindex i olika format (ascii/CSV/JSON, spreadsheet och i diagram). Svensk mäklarstatisik [2] får in data från majoriteten av svenska mäklare och även Hemnet [3] samlar in försäljningsstatistik. Bäst är att kontakta dem direkt beträffande vilka data de kan dela med sig av.
 
-Det är möjligt att spara data lokalt men maskininlärning fungerar bättre ju mer data det finns. Därför bör nog data sparas i molnet och/eller i serverhallar. Stora datamängder innebär också behov av mycket datorkraft eller långa körningar för att träna ens program. Det finns flera tjänster som erbjuder både förvaring och datorkraft, t.ex. [Microsoft Azure Cloud](https://azure.microsoft.com/en-us/) och [Google Cloud](https://cloud.google.com/).
+Det är möjligt att spara data lokalt men maskininlärning fungerar bättre ju mer data det finns. Därför bör nog data sparas i molnet och/eller i serverhallar. Stora datamängder innebär också behov av mycket datorkraft eller långa körningar för att träna ens program. Det finns flera tjänster som erbjuder både förvaring och datorkraft, t.ex. [Microsoft Azure Cloud](https://azure.microsoft.com/) och [Google Cloud](https://cloud.google.com/).
 
 ### Exempel-features [4]: 
 
@@ -20,9 +20,9 @@ Det är möjligt att spara data lokalt men maskininlärning fungerar bättre ju 
 
 Data kommer i en mängd olika format. Första steget i databearbetningen är således att översätta till ett lämpligt format.
 
-Nästa steg är att visualisera rådata, d.v.s. att plotta huspriser mot alla features och features mot varandra. Detta görs för att se över kvaliteten hos datan; finns det mycket brus eller extremvärden, saknas det data (NaN)? Extremvärden går att klippa bort och brus elimineras lätt med t.ex. medelvärdesbildning, Fourier- eller Wavelet-transformer. Olika features kan också innehålla olika mycket data och noggrannheten kan behöva anpassas.
+Nästa steg är att visualisera rådata, d.v.s., att plotta huspriser mot alla features och features mot varandra. Detta görs för att se över kvaliteten hos datan; finns det mycket brus eller extremvärden, saknas det data (*NaN*)? Extremvärden går att klippa bort och brus elimineras med t.ex. medelvärdesbildning, Fourier- eller Wavelet-transformer. Olika features kan också innehålla olika mycket data så noggrannheten kan behöva anpassas.
 
-Med visualisering går det också att leta trender. Hur beror priset på alla features? Beror features på varandra? Ger vissa features ingen påverkan alls på huspriset? Om features beror på varandra går det att koppla dem och så minska antal features? För många features kan leda till överanpassning och vissa features kan behöva normaliseras om för att underlätta för maskininlärningen [5].
+Under visualiseringen ska man också leta trender. Hur beror priset på alla features? Beror features på varandra? Ger vissa features ingen påverkan alls på huspriset? Om features beror på varandra går det att koppla dem och så minska antal features? För många features kan leda till överanpassning och vissa features kan behöva normaliseras om för att underlätta för maskininlärningen [5].
 
 ## 3. Linjär regression
 
@@ -34,13 +34,13 @@ där *W* är en *Weight*-matris som består av vektorerna *W(i)*. Varje *W(i)* m
 
 Linjär regression hittar *W*-element som minimerar skillnaden mellan *y* och de verkliga priserna. Detta går att göra med en *cost function*, *J(W)*. Det är en mångdimensionell funktion som går att visualisera som en yta i ett rum uppspänt av vektorerna *W(i)*. Höga värden hos *J* innebär en dålig anpassning och låga värden innebär god anpassning.
 
-För att minimera *J* går det att nyttja *gradient descent*. Den algoritmen "vandrar" genom *J* mot ett minimum m.h.a. derivatan *dJ/dW(i)*. Det är viktigt att välja lagom stora "vandringssteg" och ett lämpligt startvärde, annars kan algoritmen missa *J*:s minimum och oscillera kring det.
+För att minimera *J* går det att nyttja *gradient descent*. Denna algoritm "vandrar" genom *J* mot ett minimum m.h.a. derivatan *dJ/dW(i)*. Det är viktigt att välja lagom stora "vandringssteg" och ett lämpligt startvärde, annars kan algoritmen missa *J*:s minimum och oscillera kring det.
 
 ## 4. Driftsättning
 
 Det vore praktiskt med en webbaserad tjänst där användaren fyller i features för ett hus och får en uppskattning av priset inom felmarginaler. Modellen bakom bör automatiskt uppdateras m.h.a. data från myndigheter och mäklare. Datakvaliteten bör också automatiskt granskas och inflation kompenseras för.
 
-Det är vanligt att maskininlärningsprojekt aldrig blir implementerade för användning [8]. Därför är det nyttigt för utvecklare att lära sig grundläggande driftsättning. Det finns en mängd olika verktyg för att underlätta driftsättning, träna/uppdatera maskininlärningsprogram, skapa API:er och aktörer som säljer serverutrymme [9]. Exempel är bl.a. [Azure ML](https://azure.microsoft.com/), [AutoML](https://www.automl.org/), [IBM Watson ML](https://cloud.ibm.com/apidocs/machine-learning), [Kubeflow](https://www.kubeflow.org/) [TFX](https://www.tensorflow.org/tfx/).
+Det är vanligt att maskininlärningsprojekt aldrig blir implementerade för användning [8]. Därför är det nyttigt för utvecklare att lära sig grundläggande driftsättning. Det finns en mängd olika verktyg för att underlätta driftsättning, träna/uppdatera maskininlärningsprogram, skapa API:er och aktörer som säljer serverutrymme [9]. Exempel är bl.a. [Azure ML](https://azure.microsoft.com/en-gb/services/machine-learning/), [AutoML](https://www.automl.org/), [IBM Watson ML](https://cloud.ibm.com/apidocs/machine-learning), [Kubeflow](https://www.kubeflow.org/) och [TFX](https://www.tensorflow.org/tfx/).
 
 ## Teknologier/verktyg
 
